@@ -4,6 +4,7 @@ var ejs = require('ejs');
 const bodyParser = require('body-parser');
 
 var loginRoute = require('./router/login')
+var db = require('./util/database');
 
 var app = express();
 
