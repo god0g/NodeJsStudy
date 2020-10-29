@@ -1,40 +1,36 @@
-var express = require('express');
-var path = require('path');
-var ejs = require('ejs');
+const express = require('express');
+const path = require('path');
+const ejs = require('ejs');
 const bodyParser = require('body-parser');
 
-var loginRoute = require('./router/login')
-var db = require('./util/database');
+const loginRoute = require('./router/login');
+const formRoute = require('./router/from');
+const testRoute = require('./router/test');
+const auth = require('./middleware/is-auth');
+var dbSession =require('./util/databasesession');
 
 var app = express();
 
 app.use(bodyParser.urlencoded({extended:false}));
-
-
 app.set('view engine','ejs');
 
-app.use(express.static('public'))
-app.use('/login',loginRoute);
+app.use(express.static('public'));
+app.use(dbSession);
 
 app.get('/',(req,res)=>{
-    res.redirect('/login');
-});
-app.get('/form',function(req,res){
-    res.render('form',{foo:'execute form'});
-});
-
-app.get('/test',function(req,res){
-    res.render('test',{test:'execute form'});
-});
-app.post('/test', function (req, res) {
-    console.log(req.body);
-    var objTest = {
-        name: req.body.name,
-        surname: req.body.surname
+    if (req.session.isLogin) {
+        res.redirect('/form');
+    }else{
+        res.redirect('/login');
     }
-    res.send('send from post test ' + JSON.stringify(objTest));
-
 });
+
+
+app.use('/login',loginRoute);
+app.use('/form',auth,formRoute);
+app.use('/test',auth,testRoute);
+
+
 
 
 app.use((req,res,next)=>{
