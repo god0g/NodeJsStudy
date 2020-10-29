@@ -4,7 +4,8 @@ const db = require('../util/database')
 
 
 router.get('/',(req,res)=>{
-    res.render('./login',{passStr:"pass from login route",obj:{foo:"FFF" , goo:"goo"}});
+    req.session.destroy();
+    res.render('./login');
 });
 
 router.post('/', (req, res) => {
@@ -20,6 +21,11 @@ router.post('/', (req, res) => {
         }
     });
 });
+router.post('/clear', (req, res) => {
+   req.session.destroy();
+   res.redirect('/');
+});
+
 
 
 module.exports = router;
