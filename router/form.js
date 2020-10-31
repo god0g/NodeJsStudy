@@ -4,7 +4,6 @@ const db = require('../util/database')
 
 
 router.get('/',function(req,res){
-    console.log(req.session);
     res.render('form',{foo:'execute form'});
 });
 

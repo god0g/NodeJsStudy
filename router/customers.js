@@ -11,7 +11,6 @@ router.get('/',function(req,res){
 
 router.get('/list',function(req,res){
     db.execute('select * from Customers').then(([rows,fieldData])=>{
-        console.log(rows);
        res.json(rows);
     });
 });
